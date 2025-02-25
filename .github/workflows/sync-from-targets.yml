@@ -1,0 +1,32 @@
+name: Sync from Targets
+
+on:
+  repository_dispatch:  # Triggered manually or via API
+  workflow_dispatch:    # Allows manual triggering
+
+jobs:
+  sync-from-targets:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the source repository
+      - name: Checkout source repo
+        uses: actions/checkout@v3
+
+      # Step 2: Pull changes from each target repository
+      - name: Sync from Target 1
+        run: |
+          git remote add target1 https://${{ secrets.FIVERRSUPPPORT-SECRET }}@github.com/target-owner1/target-repo1.git
+          git fetch target1
+          git merge target1/main --allow-unrelated-histories
+
+      - name: Sync from Target 2
+        run: |
+          git remote add target2 https://${{ secrets.TARGET_REPO2_TOKEN }}@github.com/Fiverrsupport/ACC001.git
+          git fetch target2
+          git merge target2/main --allow-unrelated-histories
+
+      # Step 3: Push merged changes back to the source repository
+      - name: Push to source repository
+        run: |
+          git push origin main
