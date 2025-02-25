@@ -1,0 +1,26 @@
+name: Sync to Targets
+
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to the 'main' branch
+
+jobs:
+  sync-to-targets:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the source repository
+      - name: Checkout source repo
+        uses: actions/checkout@v3
+
+      # Step 2: Push changes to each target repository
+      - name: Push to Target 1
+        run: |
+          git remote add target1 https://${{ secrets.FIVERRSUPPPORT-SECRET }}@github.com/Fiverrsupport/ACC001.git
+          git push target1 main
+
+      - name: Push to Target 2
+        run: |
+          git remote add target2 https://${{ secrets.TARGET_REPO2_TOKEN }}@github.com/target-owner2/target-repo2.git
+          git push target2 main
